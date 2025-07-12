@@ -153,3 +153,32 @@ footer {
     visibility: hidden;
   }
 }
+
+#encuesta {
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 2px solid #ccc;
+  background-color: #f9f9f9;
+  text-align: center;
+  border-radius: 10px;
+}
+
+#estrellas .estrella {
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#estrellas .estrella:hover,
+#estrellas .estrella.selected {
+  transform: scale(1.2);
+  color: gold;
+}
+
+#comentario {
+  display: block;
+  width: 90%;
+  margin: 15px auto;
+  padding: 10px;
+  resize: vertical;
+}
