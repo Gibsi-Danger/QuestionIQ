@@ -1,5 +1,3 @@
-//Este si le tengo fe
-
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -13,8 +11,10 @@ const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  port: 3306   // ✅ ¡AGREGA ESTO!
 });
+
 
 
 // Verificar la conexión al iniciar el servidor
