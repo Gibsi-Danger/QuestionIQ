@@ -16,6 +16,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
+
 // Verificar la conexión al iniciar el servidor
 db.connect((err) => {
   if (err) {
