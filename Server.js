@@ -8,11 +8,12 @@ app.use(express.json());
 
 // Conexión a MySQL
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Facebook12690@', // tu contraseña
-  database: 'questioniq_db'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
+
 
 db.connect(err => {
   if (err) throw err;
@@ -20,8 +21,9 @@ db.connect(err => {
 });
 
 // Ruta para obtener respuesta según la pregunta enviada
-app.post('/preguntar', (req, res) => {
-  const { pregunta } = req.body;
+app.get("/", (req, res) => {
+  res.send("¡QuestionIQ está en línea! ✅");
+
   const sql = 'SELECT respuestas FROM respuestas WHERE preguntas = ? LIMIT 1';
 
   db.query(sql, [pregunta], (err, results) => {
