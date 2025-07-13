@@ -18,7 +18,7 @@ const db = mysql.createConnection({
 db.connect((err) => {
   if (err) {
     console.error('❌ Error de conexión a la base de datos:', err);
-    process.exit(1);
+    process.exit(1); // detiene el servidor para que Render detecte el error
   } else {
     console.log('✅ Conectado a la base de datos MySQL remota');
   }
