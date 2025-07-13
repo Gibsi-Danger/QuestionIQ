@@ -1,3 +1,5 @@
+//Este si le tengo fe
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -6,50 +8,51 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Conexión a MySQL
-
+// ✅ Conexión a la base de datos remota usando variables de entorno
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,         // ✅
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME
 });
 
+// Verificar la conexión al iniciar el servidor
 db.connect((err) => {
   if (err) {
     console.error('❌ Error de conexión a la base de datos:', err);
-    process.exit(1); // detiene el servidor para que Render detecte el error
+    process.exit(1); // Detiene la app si no se conecta
   } else {
     console.log('✅ Conectado a la base de datos MySQL remota');
   }
 });
 
-
-// Ruta para obtener respuesta según la pregunta enviada
+// Ruta base para saber si está funcionando
 app.get("/", (req, res) => {
   res.send("¡QuestionIQ está en línea! ✅");
+});
+
+// Ruta para obtener respuesta automática desde la base de datos
+app.post("/preguntar", (req, res) => {
+  const { pregunta } = req.body;
 
   const sql = 'SELECT respuestas FROM respuestas WHERE preguntas = ? LIMIT 1';
 
-db.connect((err) => {
-  if (err) {
-    console.error('❌ Error de conexión a la base de datos:', err);
-    process.exit(1); // Detiene la app para que Render sepa que falló
-  } else {
-    console.log('✅ Conectado a la base de datos MySQL');
-  };
-
-
+  db.query(sql, [pregunta], (err, results) => {
+    if (err) {
+      console.error("❌ Error al consultar:", err);
+      return res.status(500).json({ respuesta: "Error en la base de datos" });
+    }
 
     if (results.length > 0) {
       res.json({ respuesta: results[0].respuestas });
     } else {
-      res.json({ respuesta: 'No encontré una respuesta para esa pregunta.' });
+      res.json({ respuesta: "No encontré una respuesta para esa pregunta." });
     }
   });
 });
 
-const PORT = 3000;
+// Puerto de escucha
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
