@@ -28,11 +28,14 @@ app.get("/", (req, res) => {
 
   const sql = 'SELECT respuestas FROM respuestas WHERE preguntas = ? LIMIT 1';
 
-  db.query(sql, [pregunta], (err, results) => {
-    if (err) {
-  console.error('🔴 ERROR DETALLADO:', err.sqlMessage || err.message);
-  return res.status(500).json({ respuesta: 'Error en la base de datos' });
-}
+db.connect((err) => {
+  if (err) {
+    console.error('❌ Error de conexión a la base de datos:', err);
+    process.exit(1); // Detiene la app para que Render sepa que falló
+  } else {
+    console.log('✅ Conectado a la base de datos MySQL');
+  };
+
 
 
     if (results.length > 0) {
